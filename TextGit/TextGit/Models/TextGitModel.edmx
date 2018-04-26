@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TextGitModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Documents">
+          <Key>
+            <PropertyRef Name="DocumentID" />
+          </Key>
+          <Property Name="DocumentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Versions">
+          <Key>
+            <PropertyRef Name="VersionID" />
+          </Key>
+          <Property Name="VersionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ChangeNote" Type="varchar" MaxLength="50" />
+          <Property Name="DocumentContent" Type="text" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+          <Property Name="fkDocumentID" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Versions_Documents">
+          <End Role="Documents" Type="Self.Documents" Multiplicity="1" />
+          <End Role="Versions" Type="Self.Versions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Documents">
+              <PropertyRef Name="DocumentID" />
+            </Principal>
+            <Dependent Role="Versions">
+              <PropertyRef Name="fkDocumentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TextGitModelStoreContainer">
+          <EntitySet Name="Documents" EntityType="Self.Documents" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Versions" EntityType="Self.Versions" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Versions_Documents" Association="Self.FK_Versions_Documents">
+            <End Role="Documents" EntitySet="Documents" />
+            <End Role="Versions" EntitySet="Versions" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TextGitModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Documents">
+          <Key>
+            <PropertyRef Name="DocumentID" />
+          </Key>
+          <Property Name="DocumentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Versions" Relationship="Self.FK_Versions_Documents" FromRole="Documents" ToRole="Versions" />
+        </EntityType>
+        <EntityType Name="Versions">
+          <Key>
+            <PropertyRef Name="VersionID" />
+          </Key>
+          <Property Name="VersionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ChangeNote" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DocumentContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fkDocumentID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Documents" Relationship="Self.FK_Versions_Documents" FromRole="Versions" ToRole="Documents" />
+        </EntityType>
+        <Association Name="FK_Versions_Documents">
+          <End Role="Documents" Type="Self.Documents" Multiplicity="1" />
+          <End Role="Versions" Type="Self.Versions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Documents">
+              <PropertyRef Name="DocumentID" />
+            </Principal>
+            <Dependent Role="Versions">
+              <PropertyRef Name="fkDocumentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TextGitEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Documents" EntityType="Self.Documents" />
+          <EntitySet Name="Versions" EntityType="Self.Versions" />
+          <AssociationSet Name="FK_Versions_Documents" Association="Self.FK_Versions_Documents">
+            <End Role="Documents" EntitySet="Documents" />
+            <End Role="Versions" EntitySet="Versions" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TextGitModelStoreContainer" CdmEntityContainer="TextGitEntities">
+          <EntitySetMapping Name="Documents">
+            <EntityTypeMapping TypeName="TextGitModel.Documents">
+              <MappingFragment StoreEntitySet="Documents">
+                <ScalarProperty Name="DocumentID" ColumnName="DocumentID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Versions">
+            <EntityTypeMapping TypeName="TextGitModel.Versions">
+              <MappingFragment StoreEntitySet="Versions">
+                <ScalarProperty Name="VersionID" ColumnName="VersionID" />
+                <ScalarProperty Name="ChangeNote" ColumnName="ChangeNote" />
+                <ScalarProperty Name="DocumentContent" ColumnName="DocumentContent" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="fkDocumentID" ColumnName="fkDocumentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

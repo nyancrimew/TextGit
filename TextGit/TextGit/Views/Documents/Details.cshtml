@@ -1,0 +1,59 @@
+﻿@model TextGit.Models.Documents
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h3>@Html.DisplayFor(model => model.Title)</h3>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Current Version
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Versions.OrderByDescending(v => v.CreatedAt).First().CreatedAt)
+        </dd>
+
+        <dt>
+            Content
+        </dt>
+
+        <dd>
+            <!-- http://tutorialdotnet3007.blogspot.ch/2016/10/display-multiline-text-in-razor.html  -->
+            @Html.Raw(Model.Versions.OrderByDescending(v => v.CreatedAt).First().DocumentContent.Replace(Environment.NewLine, "<br/>"))
+        </dd>
+
+    </dl>
+    <h4>Version History</h4>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayName("Created at")
+            </th>
+            <th>
+                @Html.DisplayName("Change Note")
+            </th>
+        </tr>
+
+        @foreach (var item in Model.Versions.OrderByDescending(v => v.CreatedAt))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ChangeNote)
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.DocumentID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

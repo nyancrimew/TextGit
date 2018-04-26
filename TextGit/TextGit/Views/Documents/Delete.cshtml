@@ -1,0 +1,67 @@
+﻿@model TextGit.Models.Documents
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h4>Are you sure you want to delete this?</h4>
+<div>
+    <h3>@Html.DisplayFor(model => model.Title)</h3>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Current Version
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Versions.OrderByDescending(v => v.CreatedAt).First().CreatedAt)
+        </dd>
+
+        <dt>
+            Content
+        </dt>
+
+        <dd>
+            <!-- http://tutorialdotnet3007.blogspot.ch/2016/10/display-multiline-text-in-razor.html  -->
+            @Html.Raw(Model.Versions.OrderByDescending(v => v.CreatedAt).First().DocumentContent.Replace(Environment.NewLine, "<br/>"))
+        </dd>
+
+    </dl>
+    <h4>Version History</h4>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayName("Created at")
+            </th>
+            <th>
+                @Html.DisplayName("Change Note")
+            </th>
+        </tr>
+
+        @foreach (var item in Model.Versions.OrderByDescending(v => v.CreatedAt))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ChangeNote)
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color">
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+}
+</div>
